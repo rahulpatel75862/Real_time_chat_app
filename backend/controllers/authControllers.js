@@ -65,6 +65,7 @@ export const login = async (req, res) => {
         const {userName, password } = req.body;
         const user = await User.findOne({userName});
         const isPasswordCorrect = await bcrypt.compare(password, user?.password || "");
+        console.log("jfdf", userName, password)
 
         if(!user || !isPasswordCorrect ){
             return res.status(400).json({ error: "Invalid userName or password credentials "})
@@ -76,7 +77,7 @@ export const login = async (req, res) => {
             _id: user._id,
             fullName: user.fullName,
             userName: user.userName,
-            profilePice: user.profilePic,
+            profilePic: user.profilePic,
         })
 
     } catch (error) {

@@ -1,15 +1,29 @@
+import { useAuthContext } from "../../../context/AuthContext"
+import useConversation from "../../../store/useConversation";
+import { extractTime } from "../../../utils/extractTime";
+
+const Message = ({message}) => {
+  console.log("mesage", message)
+  
+
+  const { authUser } = useAuthContext();
+  const { selectedConversation } = useConversation();
+  const fromMe = message.senderId === authUser._id;
+  const chatClassName = fromMe? 'chat-end': 'chat-start';
+  const profilePic = fromMe ? authUser.profilePic: selectedConversation?.profilePic;
+  const bubbleBgColor = fromMe ? "bg-blue-500": "";
+  const formattedTime = extractTime(message.createdAt)
 
 
-const Message = () => {
   return (
-    <div className="chat chat-end">
+    <div className={`chat ${chatClassName}`}>
         <div className="chat-image avatar">
             <div className="w-10 rounded-full">
-                <img src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1708300800&semt=ais" alt="chat bubble" />
+                <img src={profilePic} alt="Tailwind CSS chat bubble component" />
             </div>
         </div>
-        <div className={`chat-bubble text-white bg-blue-500`}>Hi! whats up??</div>
-        <div className="chat-footer opacity-50 text-xs flex gap-1 items-center text-gray-200">12:42</div>
+        <div className={`chat-bubble text-white  ${bubbleBgColor}`}>{message.message}</div>
+        <div className="chat-footer opacity-50 text-xs flex gap-1 items-center text-gray-200">{formattedTime}</div>
     </div>
   )
 }
